@@ -24,9 +24,6 @@ mac:
   artifactName: "electron-app-mac-${arch}.${ext}"
   target:
     - target: tar.gz
-      arch:
-        - x64
-        - arm64
   darkModeSupport: true
   extendInfo:
 #    - NSCameraUsageDescription: Application requests access to the device's camera.
