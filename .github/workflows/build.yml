@@ -1,4 +1,4 @@
-name: Python binaries release
+name: Electron binaries release
 on:
   workflow_dispatch:
   release:
