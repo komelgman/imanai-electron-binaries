@@ -14,18 +14,13 @@ files:
 asarUnpack:
   - resources/**
 win:
-  artifactName: "electron-app-win-${arch}.${ext}"
   target:
-    - target: tar.gz
-      arch:
-        - x64
+    - target: dir
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   artifactName: "electron-app-mac-${arch}.${ext}"
   target:
     - target: tar.gz
-      arch:
-        - x64
   darkModeSupport: true
   extendInfo:
 #    - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -34,11 +29,8 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
 linux:
-  artifactName: "electron-app-linux-${arch}.${ext}"
   target:
-    - target: tar.gz
-      arch:
-        - x64
+    - target: dir
   maintainer: github.com/komelgman
   category: Utility
 npmRebuild: false
