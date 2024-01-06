@@ -20,22 +20,22 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            options: --linux --x64
+            options: ""
             artifact-name-src: electron-app-linux-x64.tar.gz
             artifact-name: electron-app-linux-x86_64.tar.gz
 
           - os: windows-latest
-            options: --win --x64
+            options: ""
             artifact-name-src: electron-app-win-x64.tar.gz
             artifact-name: electron-app-win-x86_64.tar.gz
 
           - os: macos-latest
-            options: --mac --x64
+            options: --x64
             artifact-name-src: electron-app-mac-x64.tar.gz
             artifact-name: electron-app-mac-x86_64.tar.gz
 
           - os: macos-latest
-            options: --mac --arm64
+            options: --arm64
             artifact-name-src: electron-app-mac-arm64.tar.gz
             artifact-name: electron-app-mac-arm_64.tar.gz
 
@@ -51,7 +51,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          npx electron-builder --config ./electron-builder.yml
+          npx electron-builder --config ./electron-builder.yml ${{ matrix.options }}
           mkdir -p artifacts
           mv ./dist/${{ matrix.artifact-name-src }} ./artifacts/${{ matrix.artifact-name }}
 
