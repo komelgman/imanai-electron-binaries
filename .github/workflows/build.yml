@@ -56,7 +56,7 @@ jobs:
       - name: copy artifact
         run: |
           mkdir -p artifacts
-          mv ./dist/${{ matrix.artifact-name-src }} ./artifacts/${{ matrix.artifact-name }}
+          mv ./dist/${{ matrix.artifact-name-src }}.tar.gz ./artifacts/${{ matrix.artifact-name }}
 #          tar -xzf ./dist/${{ matrix.artifact-name-src }}.tar.gz -C ./artifacts
 #          tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./artifacts ${{ matrix.artifact-name-src }}
 
