@@ -51,7 +51,7 @@ jobs:
         run: |
           npm ci
           npm run build
-          npx electron-builder --publish false --config ./${{ matrix.config }}
+          npx electron-builder --publish never --config ./${{ matrix.config }}
 
       - name: copy artifact
         run: |
