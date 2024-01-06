@@ -18,14 +18,14 @@ win:
   target:
     - target: tar.gz
       arch:
-        - x64
+        - arm64
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   artifactName: "electron-app-mac-${arch}.${ext}"
   target:
     - target: tar.gz
       arch:
-        - x64
+        - arm64
   darkModeSupport: true
   extendInfo:
 #    - NSCameraUsageDescription: Application requests access to the device's camera.
@@ -38,7 +38,7 @@ linux:
   target:
     - target: tar.gz
       arch:
-        - x64
-  maintainer: github.com/komelgman
+        - arm64
+      maintainer: github.com/komelgman
   category: Utility
 npmRebuild: false
