@@ -16,7 +16,7 @@ defaults:
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         include:
 #          - os: ubuntu-latest
@@ -34,10 +34,10 @@ jobs:
             artifact-name-src: electron-app-mac-x64
             artifact-name: electron-app-mac-x86_64.tar.gz
 
-          - os: macos-latest
-            config: electron-builder.arm64.yml
-            artifact-name-src: electron-app-mac-arm64
-            artifact-name: electron-app-mac-arm_64.tar.gz
+#          - os: macos-latest
+#            config: electron-builder.arm64.yml
+#            artifact-name-src: electron-app-mac-arm64
+#            artifact-name: electron-app-mac-arm_64.tar.gz
 
     name: Build binary (os=${{ matrix.os }}, artifact=${{ matrix.artifact-name }})
     runs-on: ${{ matrix.os }}
@@ -52,6 +52,9 @@ jobs:
           npm ci
           npm run build
           npx electron-builder --config ./${{ matrix.config }}
+
+      - name: copy artifact
+        run: |
           mkdir -p artifacts
           tar -xzf ./dist/${{ matrix.artifact-name-src }}.tar.gz -C ./artifacts
           tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./artifacts ${{ matrix.artifact-name-src }}
