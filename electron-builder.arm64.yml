@@ -39,6 +39,6 @@ linux:
     - target: tar.gz
       arch:
         - arm64
-      maintainer: github.com/komelgman
+  maintainer: github.com/komelgman
   category: Utility
 npmRebuild: false
