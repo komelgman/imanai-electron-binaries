@@ -19,25 +19,25 @@ jobs:
       fail-fast: true
       matrix:
         include:
-#          - os: ubuntu-latest
-#            config: electron-builder.yml
-#            artifact-name-src: electron-app-linux-x64
-#            artifact-name: electron-app-linux-x86_64.tar.gz
-#
-#          - os: windows-latest
-#            config: electron-builder.yml
-#            artifact-name-src: electron-app-win-x64
-#            artifact-name: electron-app-win-x86_64.tar.gz
+          - os: ubuntu-latest
+            config: electron-builder.yml
+            artifact-name-src: electron-app-linux-x64
+            artifact-name: electron-app-linux-x86_64.tar.gz
+
+          - os: windows-latest
+            config: electron-builder.yml
+            artifact-name-src: electron-app-win-x64
+            artifact-name: electron-app-win-x86_64.tar.gz
 
           - os: macos-latest
             config: electron-builder.yml
             artifact-name-src: electron-app-mac-x64
             artifact-name: electron-app-mac-x86_64.tar.gz
 
-#          - os: macos-latest
-#            config: electron-builder.arm64.yml
-#            artifact-name-src: electron-app-mac-arm64
-#            artifact-name: electron-app-mac-arm_64.tar.gz
+          - os: macos-latest
+            config: electron-builder.arm64.yml
+            artifact-name-src: electron-app-mac-arm64
+            artifact-name: electron-app-mac-arm_64.tar.gz
 
     name: Build binary (os=${{ matrix.os }}, artifact=${{ matrix.artifact-name }})
     runs-on: ${{ matrix.os }}
@@ -51,14 +51,17 @@ jobs:
         run: |
           npm ci
           npm run build
-          npx electron-builder --config ./${{ matrix.config }}
+          npx electron-builder --publish false --config ./${{ matrix.config }}
 
       - name: copy artifact
         run: |
           mkdir -p artifacts
-          mv ./dist/${{ matrix.artifact-name-src }}.tar.gz ./artifacts/${{ matrix.artifact-name }}
-#          tar -xzf ./dist/${{ matrix.artifact-name-src }}.tar.gz -C ./artifacts
-#          tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./artifacts ${{ matrix.artifact-name-src }}
+          if [[ "$OSTYPE" == "darwin"* ]]; then
+            mv ./dist/${{ matrix.artifact-name-src }}.tar.gz ./artifacts/${{ matrix.artifact-name }}
+          else
+            tar -xzf ./dist/${{ matrix.artifact-name-src }}.tar.gz -C ./artifacts
+            tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./artifacts ${{ matrix.artifact-name-src }}
+          fi
 
       - name: upload-artifact ${{ matrix.artifact-name }}
         uses: actions/upload-artifact@v4
