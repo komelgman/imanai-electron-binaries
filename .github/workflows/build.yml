@@ -24,20 +24,20 @@ jobs:
             artifact-name-src: electron-app-linux-x64.tar.gz
             artifact-name: electron-app-linux-x86_64.tar.gz
 
-          - os: windows-latest
-            options: ""
-            artifact-name-src: electron-app-win-x64.tar.gz
-            artifact-name: electron-app-win-x86_64.tar.gz
-
-          - os: macos-latest
-            options: --x64
-            artifact-name-src: electron-app-mac-x64.tar.gz
-            artifact-name: electron-app-mac-x86_64.tar.gz
-
-          - os: macos-latest
-            options: --arm64
-            artifact-name-src: electron-app-mac-arm64.tar.gz
-            artifact-name: electron-app-mac-arm_64.tar.gz
+#          - os: windows-latest
+#            options: ""
+#            artifact-name-src: electron-app-win-x64.tar.gz
+#            artifact-name: electron-app-win-x86_64.tar.gz
+#
+#          - os: macos-latest
+#            options: --x64
+#            artifact-name-src: electron-app-mac-x64.tar.gz
+#            artifact-name: electron-app-mac-x86_64.tar.gz
+#
+#          - os: macos-latest
+#            options: --arm64
+#            artifact-name-src: electron-app-mac-arm64.tar.gz
+#            artifact-name: electron-app-mac-arm_64.tar.gz
 
     name: Build binary (os=${{ matrix.os }}, artifact=${{ matrix.artifact-name }})
     runs-on: ${{ matrix.os }}
