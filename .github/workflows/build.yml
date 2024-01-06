@@ -1,0 +1,85 @@
+name: Python binaries release
+on:
+  workflow_dispatch:
+  release:
+    types: [created]
+
+concurrency:
+  group:
+    ${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash -el {0}
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact-name-src: electron-app-linux-x64.tar.gz
+            artifact-name: electron-app-linux-x86_64.tar.gz
+
+          - os: windows-latest
+            artifact-name-src: electron-app-win-x64.tar.gz
+            artifact-name: electron-app-win-x86_64.tar.gz
+
+          - os: macos-latest
+            artifact-name-src: electron-app-mac-x64.tar.gz
+            artifact-name: electron-app-mac-x86_64.tar.gz
+
+          - os: macos-latest
+            artifact-name-src: electron-app-mac-arm64.tar.gz
+            artifact-name: electron-app-mac-arm_64.tar.gz
+
+    name: Build binary (os=${{ matrix.os }}, artifact=${{ matrix.artifact-name }})
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+        run: npm ci
+
+      - name: build artifact
+        run: |
+          npx electron-builder --config ./electron-builder.yml
+          mkdir -p artifacts
+          mv ./dist/${{ matrix.artifact-name-src }} ./artifacts/${{ matrix.artifact-name }}
+
+      - name: upload-artifact ${{ matrix.artifact-name }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ./artifacts/*.tar.gz
+
+#  release:
+#    runs-on: ubuntu-latest
+#    needs: [ build ]
+#    permissions:
+#      contents: write
+#    steps:
+#      - name: download artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          path: ./artifacts
+#          merge-multiple: true
+#
+#      - name: md5sum
+#        run: |
+#          sudo apt-get install -y coreutils
+#          cd ./artifacts
+#          md5sum * > python-pack-md5sums.txt
+#
+#      - name: attach artifacts to release
+#        uses: ncipollo/release-action@v1.13.0
+#        with:
+#          artifacts: ./artifacts/*
+#          allowUpdates: true
+#          removeArtifacts: true
+#          omitNameDuringUpdate: true
+#          omitBodyDuringUpdate: true
+#          updateOnlyUnreleased: true
