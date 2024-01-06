@@ -42,10 +42,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           cache: 'npm'
-        run: npm ci
 
       - name: build artifact
         run: |
+          npm ci
           npx electron-builder --config ./electron-builder.yml
           mkdir -p artifacts
           mv ./dist/${{ matrix.artifact-name-src }} ./artifacts/${{ matrix.artifact-name }}
