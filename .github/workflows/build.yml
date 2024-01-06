@@ -1,6 +1,5 @@
 name: Electron binaries release
 on:
-  workflow_dispatch:
   release:
     types: [created]
 
@@ -24,20 +23,20 @@ jobs:
             artifact-name-src: electron-app-linux-x64.tar.gz
             artifact-name: electron-app-linux-x86_64.tar.gz
 
-#          - os: windows-latest
-#            options: ""
-#            artifact-name-src: electron-app-win-x64.tar.gz
-#            artifact-name: electron-app-win-x86_64.tar.gz
-#
-#          - os: macos-latest
-#            options: --x64
-#            artifact-name-src: electron-app-mac-x64.tar.gz
-#            artifact-name: electron-app-mac-x86_64.tar.gz
-#
-#          - os: macos-latest
-#            options: --arm64
-#            artifact-name-src: electron-app-mac-arm64.tar.gz
-#            artifact-name: electron-app-mac-arm_64.tar.gz
+          - os: windows-latest
+            options: ""
+            artifact-name-src: electron-app-win-x64.tar.gz
+            artifact-name: electron-app-win-x86_64.tar.gz
+
+          - os: macos-latest
+            options: --x64
+            artifact-name-src: electron-app-mac-x64.tar.gz
+            artifact-name: electron-app-mac-x86_64.tar.gz
+
+          - os: macos-latest
+            options: --arm64
+            artifact-name-src: electron-app-mac-arm64.tar.gz
+            artifact-name: electron-app-mac-arm_64.tar.gz
 
     name: Build binary (os=${{ matrix.os }}, artifact=${{ matrix.artifact-name }})
     runs-on: ${{ matrix.os }}
@@ -61,30 +60,30 @@ jobs:
           name: ${{ matrix.artifact-name }}
           path: ./artifacts/*.tar.gz
 
-#  release:
-#    runs-on: ubuntu-latest
-#    needs: [ build ]
-#    permissions:
-#      contents: write
-#    steps:
-#      - name: download artifacts
-#        uses: actions/download-artifact@v4
-#        with:
-#          path: ./artifacts
-#          merge-multiple: true
-#
-#      - name: md5sum
-#        run: |
-#          sudo apt-get install -y coreutils
-#          cd ./artifacts
-#          md5sum * > python-pack-md5sums.txt
-#
-#      - name: attach artifacts to release
-#        uses: ncipollo/release-action@v1.13.0
-#        with:
-#          artifacts: ./artifacts/*
-#          allowUpdates: true
-#          removeArtifacts: true
-#          omitNameDuringUpdate: true
-#          omitBodyDuringUpdate: true
-#          updateOnlyUnreleased: true
+  release:
+    runs-on: ubuntu-latest
+    needs: [ build ]
+    permissions:
+      contents: write
+    steps:
+      - name: download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: ./artifacts
+          merge-multiple: true
+
+      - name: md5sum
+        run: |
+          sudo apt-get install -y coreutils
+          cd ./artifacts
+          md5sum * > electron-app-md5sums.txt
+
+      - name: attach artifacts to release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          artifacts: ./artifacts/*
+          allowUpdates: true
+          removeArtifacts: true
+          omitNameDuringUpdate: true
+          omitBodyDuringUpdate: true
+          updateOnlyUnreleased: true
