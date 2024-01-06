@@ -21,12 +21,12 @@ jobs:
         include:
           - os: ubuntu-latest
             build-options: --x64
-            artifact-name-src: linux-x64-unpacked
+            artifact-name-src: linux-unpacked
             artifact-name: electron-app-linux-x86_64.tar.gz
 
           - os: windows-latest
             build-options: --x64
-            artifact-name-src: win-x64-unpacked
+            artifact-name-src: win-unpacked
             artifact-name: electron-app-win-x86_64.tar.gz
 
           - os: macos-latest
@@ -59,7 +59,7 @@ jobs:
           if [[ "$OSTYPE" == "darwin"* ]]; then
             mv ./dist/${{ matrix.artifact-name-src }} ./artifacts/${{ matrix.artifact-name }}
           else
-            tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./dist ${{ matrix.artifact-name-src }}
+            tar -czf ./artifacts/${{ matrix.artifact-name }} -C ./dist/${{ matrix.artifact-name-src }} .
           fi
 
       - name: upload-artifact ${{ matrix.artifact-name }}
